@@ -68,6 +68,18 @@ app.get('/records/:id', async (req, res) => {
   }
 });
 
+// get specific patient record
+app.get('/specificRecord/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const query = { _id: ObjectId(id) };
+    const record = await allRecordCollection.findOne(query);
+    res.send(record);
+  } catch (error) {
+    console.log(error.message.bold);
+  }
+});
+
 //* -------------------------POST(CREATE)-------------------------
 // post a new patient record
 app.post('/records', async (req, res) => {
@@ -81,7 +93,7 @@ app.post('/records', async (req, res) => {
 });
 
 //* ----------------------PUT/PATCH(UPDATE)----------------------
-/* app.put('/records/:id', async (req, res) => {
+app.put('/records/:id', async (req, res) => {
   try {
     const id = req.params.id;
     // console.log(id);
@@ -108,7 +120,7 @@ app.post('/records', async (req, res) => {
   } catch (error) {
     console.log(error.message.bold);
   }
-}); */
+});
 
 //* ---------------------DELETE(DELETE)------------------------
 // delete a patient record
