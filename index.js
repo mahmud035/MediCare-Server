@@ -37,6 +37,48 @@ const dbConnect = async () => {
 dbConnect();
 
 //* Collections
+const allRecordCollection = client.db('mediCareDBUser').collection('allRecord');
+
+//* -------------------------GET(READ)-------------------------
+// get all patient records
+app.get('/records', async (req, res) => {
+  try {
+    const doctorEmail = req.query.email;
+    const query = {
+      doctorEmail: doctorEmail,
+    };
+    const allRecord = await allRecordCollection.find(query).toArray();
+    res.send(allRecord);
+  } catch (error) {
+    console.log(error.message.bold);
+  }
+});
+
+//* -------------------------POST(CREATE)-------------------------
+// post a new patient record
+app.post('/records', async (req, res) => {
+  try {
+    const patientRecordObj = req.body;
+    const result = await allRecordCollection.insertOne(patientRecordObj);
+    res.send(result);
+  } catch (error) {
+    console.log(error.message.bold);
+  }
+});
+//* ----------------------PUT/PATCH(UPDATE)----------------------
+
+//* -------------------------DELETE(DELETE)-------------------------
+// delete a patient record
+app.delete('/records/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const query = { _id: ObjectId(id) };
+    const result = await allRecordCollection.deleteOne(query);
+    res.send(result);
+  } catch (error) {
+    console.log(error.message.bold);
+  }
+});
 
 app.listen(port, () => {
   console.log('Server up and running'.cyan.bold);
