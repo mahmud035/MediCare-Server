@@ -54,6 +54,20 @@ app.get('/records', async (req, res) => {
   }
 });
 
+// get specific patient's record for updating
+app.get('/records/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log(id);
+    const query = { _id: ObjectId(id) };
+    console.log(query);
+    const record = await allRecordCollection.findOne(query);
+    res.send(record);
+  } catch (error) {
+    console.log(error.message.bold);
+  }
+});
+
 //* -------------------------POST(CREATE)-------------------------
 // post a new patient record
 app.post('/records', async (req, res) => {
@@ -65,9 +79,38 @@ app.post('/records', async (req, res) => {
     console.log(error.message.bold);
   }
 });
-//* ----------------------PUT/PATCH(UPDATE)----------------------
 
-//* -------------------------DELETE(DELETE)-------------------------
+//* ----------------------PUT/PATCH(UPDATE)----------------------
+/* app.put('/records/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    // console.log(id);
+    const filter = { _id: ObjectId(id) };
+    // console.log(filter);
+    const updatedRecord = req.body;
+    // console.log(updatedRecord);
+    const updatedRecordObject = {
+      $set: {
+        patientName: updatedRecord.patientName,
+        age: updatedRecord.age,
+        bloodPressure: updatedRecord.bloodPressure,
+        phoneNumber: updatedRecord.phoneNumber,
+        diseaseName: updatedRecord.diseaseName,
+        treatment: updatedRecord.treatment,
+        nextAppointment: updatedRecord.nextAppointment,
+      },
+    };
+    const result = await allRecordCollection.updateOne(
+      filter,
+      updatedRecordObject
+    );
+    res.send(result);
+  } catch (error) {
+    console.log(error.message.bold);
+  }
+}); */
+
+//* ---------------------DELETE(DELETE)------------------------
 // delete a patient record
 app.delete('/records/:id', async (req, res) => {
   try {
